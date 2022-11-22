@@ -4,24 +4,24 @@ public class StudentNotFoundException extends RuntimeException {
 
     private static final String DEFAULT_MESSAGE = "Student not found: ";
 
-    private final Long id;
+    private final String field;
 
-    public StudentNotFoundException(Long id) {
-        this(DEFAULT_MESSAGE + id, id);
+    public StudentNotFoundException(String field) {
+        this(DEFAULT_MESSAGE + field, field);
     }
 
-    public StudentNotFoundException(String message, Long id) {
+    public StudentNotFoundException(String message, String field) {
         super(message);
-        this.id = id;
+        this.field = field;
     }
 
-    public StudentNotFoundException(String message, Long id, Exception e) {
+    public StudentNotFoundException(String message, String field, Exception e) {
         super(message, e);
-        this.id = id;
+        this.field = field;
     }
 
-    public Long getId() {
-        return id;
+    public String getField() {
+        return field;
     }
 
 }

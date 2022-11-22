@@ -23,11 +23,13 @@ public class StudentResponseBuilderImpl implements StudentResponseBuilder {
                 .age(student.getAge())
                 .teachersId(new ArrayList<>())
                 .build();
-        List<Long> teachersId = new ArrayList<>();
-        for (Teacher teacher : student.getTeachers()) {
-            teachersId.add(teacher.getId());
+        if (student.getTeachers() != null) {
+            List<Long> teachersId = new ArrayList<>();
+            for (Teacher teacher : student.getTeachers()) {
+                teachersId.add(teacher.getId());
+            }
+            result.setTeachersId(teachersId);
         }
-        result.setTeachersId(teachersId);
         return result;
     }
 }

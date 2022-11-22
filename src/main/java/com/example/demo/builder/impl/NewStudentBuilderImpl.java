@@ -3,7 +3,7 @@ package com.example.demo.builder.impl;
 import com.example.demo.builder.NewStudentBuilder;
 import com.example.demo.dto.StudentFormDto;
 import com.example.demo.model.Student;
-import com.example.demo.validation.FormsValidation;
+import com.example.demo.validation.StudentFormValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,17 +11,17 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class NewStudentBuilderImpl implements NewStudentBuilder {
 
-    private final FormsValidation formsValidation;
+    private final StudentFormValidation studentFormValidation;
 
     @Override
     public Student buildStudent(StudentFormDto studentFormDto) {
-        formsValidation.validateNewStudentForm(studentFormDto);
-        return Student.builder()
-                .firstName(studentFormDto.getFirstname())
-                .lastName(studentFormDto.getLastname())
-                .direction(studentFormDto.getDirection())
-                .email(studentFormDto.getEmail())
-                .age(studentFormDto.getAge())
-                .build();
+        studentFormValidation.validateNewStudentForm(studentFormDto);
+        Student student = new Student();
+        student.setAge(Integer.parseInt(studentFormDto.getAge()));
+        student.setFirstName(studentFormDto.getFirstname());
+        student.setLastName(studentFormDto.getLastname());
+        student.setEmail(studentFormDto.getEmail());
+        student.setDirection(studentFormDto.getDirection());
+        return student;
     }
 }

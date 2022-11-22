@@ -6,7 +6,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -41,5 +42,19 @@ public class Teacher {
     )
     @ToString.Exclude
     @JsonIgnore
-    private List<Student> students;
+    private Set<Student> students;
+
+    public void addStudent(Student student) {
+        if (students == null) {
+            students = new HashSet<>();
+        }
+        students.add(student);
+    }
+
+    public void deleteStudent(Student student) {
+        if (student == null) {
+            students = new HashSet<>();
+        }
+        students.remove(student);
+    }
 }

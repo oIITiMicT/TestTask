@@ -6,12 +6,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-@Builder
 @Table(name="student")
 public class Student {
     @Id
@@ -43,7 +43,17 @@ public class Student {
     @JsonIgnore
     private Set<Teacher> teachers;
 
-    public Student() {
-        
+    public void addTeacher(Teacher teacher) {
+        if (teachers == null) {
+            teachers = new HashSet<>();
+        }
+        teachers.add(teacher);
+    }
+
+    public void deleteTeacher(Teacher teacher) {
+        if (teachers == null) {
+            teachers = new HashSet<>();
+        }
+        teachers.remove(teacher);
     }
 }
