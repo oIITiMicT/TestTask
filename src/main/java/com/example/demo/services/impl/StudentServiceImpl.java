@@ -1,20 +1,20 @@
 package com.example.demo.services.impl;
 
-import com.example.demo.dto.StudentFormDto;
-import com.example.demo.exception.StudentNotFoundException;
-import com.example.demo.exception.TeacherNotFoundException;
+import com.example.demo.exception.IllegalRequestParamException;
 import com.example.demo.model.Student;
 import com.example.demo.model.Teacher;
 import com.example.demo.repository.StudentRepository;
 import com.example.demo.services.StudentService;
-import com.example.demo.services.TeacherService;
-import com.example.demo.validation.StudentFormValidation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -49,5 +49,48 @@ public class StudentServiceImpl implements StudentService {
         student.deleteTeacher(teacher);
         saveStudent(student);
         return student;
+    }
+
+    private void checkField(String sortBy) {
+        Field[] fields = Student.class.getDeclaredFields();
+        boolean flag = false;
+        for (Field field : fields) {
+            field.setAccessible(true);
+            if (field.getName().equals(sortBy)) {
+                flag = true;
+                break;
+            }
+        }
+        if (!flag) {
+            throw new IllegalRequestParamException("cannot find field: ", sortBy);
+        }
+    }
+
+    private void checkPageParams(Long page, Long number) {
+        if (page < 0) {
+            throw new IllegalRequestParamException("Page params incorrect: ", Long.toString(page));
+        }
+
+        if (number < 1) {
+            throw new IllegalRequestParamException("Page params incorrect: ", Long.toString(number));
+        }
+    }
+
+    @Override
+    public Page<Student> getPageOfStudents(Long page, Long number) {
+        checkPageParams(page, number);
+        Pageable pageable = PageRequest.of(page.intValue(), number.intValue());
+        return studentRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Student> getSortedListOfStudents(String sortBy) {
+        checkField(sortBy);
+        return studentRepository.findAll(Sort.by(sortBy));
+    }
+
+    @Override
+    public List<Student> getListOfStudents() {
+        return studentRepository.findAll();
     }
 }

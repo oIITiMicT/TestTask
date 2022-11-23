@@ -12,9 +12,13 @@ import com.example.demo.services.StudentService;
 import com.example.demo.services.TeacherService;
 import com.example.demo.validation.StudentFormValidation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.awt.print.Pageable;
 
 @RestController
 @RequiredArgsConstructor
@@ -75,5 +79,18 @@ public class StudentController {
         Teacher teacher = teacherService.findTeacherById(teacherId).orElseThrow(() -> new TeacherNotFoundException(Long.toString(teacherId)));
         student = studentService.deleteTeacherFromStudent(student, teacher);
         return new ResponseEntity<>(studentResponseBuilder.buildStudentResponse(student), HttpStatus.OK);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<?> getPageOfStudents(@RequestParam(required = false, name="page") Long page,
+                                               @RequestParam(required = false, name="number") Long number,
+                                               @RequestParam(required = false, name="sortBy") String sortBy) {
+        if (sortBy == null && (page == null || number == null)) {
+            return new ResponseEntity<>(studentService.getListOfStudents(), HttpStatus.OK);
+        }
+        if (sortBy == null) {
+            return new ResponseEntity<>(studentService.getPageOfStudents(page, number), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(studentService.getSortedListOfStudents(sortBy), HttpStatus.OK);
     }
 }
