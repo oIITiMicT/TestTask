@@ -2,9 +2,7 @@ package com.example.demo.builder.impl;
 
 import com.example.demo.builder.NewTeacherBuilder;
 import com.example.demo.dto.TeacherFormDto;
-import com.example.demo.model.Student;
 import com.example.demo.model.Teacher;
-import com.example.demo.validation.StudentFormValidation;
 import com.example.demo.validation.TeacherFormValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

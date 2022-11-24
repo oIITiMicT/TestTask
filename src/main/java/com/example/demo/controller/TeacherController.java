@@ -13,7 +13,15 @@ import com.example.demo.validation.TeacherFormValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 @RestController
 @RequiredArgsConstructor
@@ -74,5 +82,29 @@ public class TeacherController {
         Student student = studentService.findStudentById(studentId).orElseThrow(() -> new StudentNotFoundException(Long.toString(studentId)));
         teacher = teacherService.deleteStudentFromTeacher(teacher, student);
         return new ResponseEntity<>(teacherResponseBuilder.buildTeacherResponse(teacher), HttpStatus.OK);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<?> getPageOfTeachers(@RequestParam(required = false, name="page") Long page,
+                                               @RequestParam(required = false, name="number") Long number,
+                                               @RequestParam(required = false, name="sortBy") String sortBy) {
+        if (sortBy == null && (page == null || number == null)) {
+            return new ResponseEntity<>(teacherService.getListOfTeachers(), HttpStatus.OK);
+        }
+        if (sortBy == null) {
+            return new ResponseEntity<>(teacherService.getPageOfTeachers(page, number), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(teacherService.getSortedListOfTeachers(sortBy), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/students")
+    public ResponseEntity<?> getListOfStudentsAssociatedWithTeacher(@PathVariable Long id) {
+        return new ResponseEntity<>(teacherService.getAssociatedStudents(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/find")
+    public ResponseEntity<?> findTeachersByFirstNameAndLastName(@RequestParam(required = false, name = "firstname") String firstName,
+                                                                @RequestParam(required = false, name = "lastname") String lastName) {
+        return new ResponseEntity<>(teacherService.findTeachersByFirstnameAndLastname(firstName, lastName), HttpStatus.OK);
     }
 }

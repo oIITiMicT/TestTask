@@ -1,12 +1,10 @@
 package com.example.demo.builder.impl;
 
 import com.example.demo.builder.TeacherResponseBuilder;
-import com.example.demo.dto.StudentResponseDto;
 import com.example.demo.dto.TeacherResponseDto;
 import com.example.demo.model.Student;
 import com.example.demo.model.Teacher;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 

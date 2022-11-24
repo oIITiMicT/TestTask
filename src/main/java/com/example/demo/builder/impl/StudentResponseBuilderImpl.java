@@ -5,7 +5,6 @@ import com.example.demo.dto.StudentResponseDto;
 import com.example.demo.model.Student;
 import com.example.demo.model.Teacher;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 

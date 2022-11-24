@@ -3,9 +3,9 @@ package com.example.demo.services;
 import com.example.demo.model.Student;
 import com.example.demo.model.Teacher;
 import org.springframework.data.domain.Page;
-
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface StudentService {
 
@@ -24,4 +24,8 @@ public interface StudentService {
     List<Student> getSortedListOfStudents(String sortBy);
 
     List<Student> getListOfStudents();
+
+    Set<Teacher> getAssociatedTeachers(Long studentId);
+
+    List<Student> findStudentsByFirstnameAndLastname(String firstName, String lastName);
 }
